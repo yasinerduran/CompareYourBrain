@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    public Number activeNumber;
+    public int activeNumber;
     private Rotate rotate;
     private ChangeColor color;
     public bool isCubeSelected = false;
+    private OperatorManager operatorManager;
+    
     
     // Start is called before the first frame update
     void Start()
     {
         color = this.GetComponent<ChangeColor>();
         rotate = this.GetComponent<Rotate>();
+        operatorManager = FindObjectOfType<OperatorManager>();
     }
     
     // Update is called once per frame
@@ -23,28 +26,45 @@ public class Cube : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit))
+            if (operatorManager.isOperatorSelected)
             {
-                if (hit.transform.name == transform.name)
+                if (Physics.Raycast(ray, out hit))
                 {
-                    if (!isCubeSelected)
+                    if (hit.transform.name == transform.name)
                     {
-                        isCubeSelected = true;
-                        var result = FindObjectOfType<Result>();
-                        result.value = result.value + activeNumber.value;
-                        color.SetSelectedMaterial();
-                    }
-                    else
-                    {
-                        isCubeSelected = false;
-                        var result = FindObjectOfType<Result>();
-                        result.value = result.value - activeNumber.value;
-                        color.SetDefaultMaterial();
-                        rotate.RandomRotate();
+                        if (!isCubeSelected)
+                        {
+                            isCubeSelected = true;
+                            var result = FindObjectOfType<Result>();
+                            result.Prosess(true,activeNumber);
+                            color.SetSelectedMaterial();
+                        }
+                        else
+                        {
+                            /*
+                            isCubeSelected = false;
+                            var result = FindObjectOfType<Result>();
+                            result.Prosess(false,activeNumber);
+                            activeNumber = 0;
+                            color.SetDefaultMaterial();
+                            rotate.RandomRotate();*/
+                        }
                     }
                 }
             }
+            else
+            {
+               
+            }
         }
     }
+
+    public void Clear()
+    {
+        isCubeSelected = false;
+        activeNumber = 0;
+        color.SetDefaultMaterial();
+        rotate.RandomRotate();
+    }
+    
 }

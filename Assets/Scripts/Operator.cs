@@ -8,7 +8,14 @@ public class Operator : MonoBehaviour
     public ChangeColor color;
     public String operatorType;
     public bool isOperatorSelected = false;
-    
+
+    public OperatorManager operatorManager;
+
+    private void Start()
+    {
+        operatorManager = FindObjectOfType<OperatorManager>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -24,12 +31,14 @@ public class Operator : MonoBehaviour
                     if (!isOperatorSelected)
                     {
                         isOperatorSelected = true;
+                        operatorManager.selectedOperator = this;
                         color.SetSelectedMaterial();
                     }
                     else
                     {
                         isOperatorSelected = false;
                         color.SetDefaultMaterial();
+                        operatorManager.ClickEventForOperator();
                     }
                 }
             }

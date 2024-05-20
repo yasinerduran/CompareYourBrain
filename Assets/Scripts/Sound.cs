@@ -6,16 +6,21 @@ public class Sound : MonoBehaviour
 {
     public AudioSource selectSound;
     public AudioSource unSelectSound;
+    public AudioSource errorSound;
+
+    public OperatorManager operatorManager;
     private ChangeColor color;
     // Start is called before the first frame update
     void Start()
     {
         color = this.GetComponent<ChangeColor>();
+        operatorManager = FindObjectOfType<OperatorManager>();
     }
     
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -25,16 +30,25 @@ public class Sound : MonoBehaviour
             {
                 if (hit.transform.name == transform.name)
                 {
-                    if (color.GetActiveMaterial()==color.defaultMaterial.color)
+                    if (operatorManager.isOperatorSelected)
                     {
-                       selectSound.Play();
+                        if (color.GetActiveMaterial()==color.defaultMaterial.color)
+                        {
+                            selectSound.Play();
+                        }
+                        else
+                        {
+                            unSelectSound.Play();
+                        }
                     }
                     else
                     {
-                        unSelectSound.Play();
+                        errorSound.Play();
                     }
                 }
+                
             }
         }
     }
+    
 }

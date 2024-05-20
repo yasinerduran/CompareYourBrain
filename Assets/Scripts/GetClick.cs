@@ -10,7 +10,7 @@ public class GetClick : MonoBehaviour
     public Cube cube;
     private void OnMouseDown()
     {
-        var number = GetComponent<GetCard>();
-        cube.activeNumber = number.number;
+        var face = GetComponent<GetCard>();
+        cube.activeNumber = face.number.value;
     }
 }
